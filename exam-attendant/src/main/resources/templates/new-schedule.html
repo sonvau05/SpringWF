@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New Schedule</title>
+    <style>
+        .error { color: red; }
+        div { margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>New Schedule</h1>
+    <a th:href="@{/}">Back to Home</a>
+    <br><br>
+    <form th:action="@{/new-schedule}" th:object="${scheduler}" method="post">
+        
+        <div>
+            <label>Pick an Exam:</label>
+            <select th:field="*{exam}">
+                <option value="">-- Select Exam --</option>
+                <option th:each="ex : ${exams}" th:value="${ex.id}" th:text="${ex.name}"></option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('exam')}" th:errors="*{exam}"></span>
+        </div>
+
+        <div>
+            <label>Time Slot:</label>
+            <input type="text" th:field="*{timeSlot}" />
+            <span class="error" th:if="${#fields.hasErrors('timeSlot')}" th:errors="*{timeSlot}"></span>
+        </div>
+
+        <div>
+            <label>Location:</label>
+            <input type="text" th:field="*{location}" />
+            <span class="error" th:if="${#fields.hasErrors('location')}" th:errors="*{location}"></span>
+        </div>
+
+        <div>
+            <label>Exam Sitter:</label>
+            <input type="text" th:field="*{examSitter}" />
+            <span class="error" th:if="${#fields.hasErrors('examSitter')}" th:errors="*{examSitter}"></span>
+        </div>
+
+        <div>
+            <label>Start At:</label>
+            <input type="datetime-local" th:field="*{startAt}" />
+            <span class="error" th:if="${#fields.hasErrors('startAt')}" th:errors="*{startAt}"></span>
+        </div>
+
+        <div>
+            <label>End At:</label>
+            <input type="datetime-local" th:field="*{endAt}" />
+            <span class="error" th:if="${#fields.hasErrors('endAt')}" th:errors="*{endAt}"></span>
+        </div>
+
+        <button type="submit">Create Schedule</button>
+    </form>
+</body>
+</html>

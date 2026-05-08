@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Schedule</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>View Schedule</h1>
+    <a th:href="@{/}">Back to Home</a> | <a th:href="@{/new-schedule}">New Schedule</a>
+    <br><br>
+    <table>
+        <thead>
+            <tr>
+                <th>Exam Name</th>
+                <th>Time Slot</th>
+                <th>Location</th>
+                <th>Exam Sitter</th>
+                <th>Start At</th>
+                <th>End At</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="schedule : ${schedules}">
+                <td th:text="${schedule.exam.name}"></td>
+                <td th:text="${schedule.timeSlot}"></td>
+                <td th:text="${schedule.location}"></td>
+                <td th:text="${schedule.examSitter}"></td>
+                <td th:text="${#temporals.format(schedule.startAt, 'yyyy-MM-dd HH:mm')}"></td>
+                <td th:text="${#temporals.format(schedule.endAt, 'yyyy-MM-dd HH:mm')}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(schedules)}">
+                <td colspan="6">No schedules found.</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
