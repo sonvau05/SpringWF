@@ -14,7 +14,6 @@ public class DemoApplication {
         SpringApplication.run(DemoApplication.class, args);
     }
 
-    // Seed initial data if exams are empty so the dropdown has options
     @Bean
     public CommandLineRunner dataLoader(ExamRepository examRepo) {
         return args -> {
