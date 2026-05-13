@@ -1,0 +1,17 @@
+CREATE DATABASE flight_db;
+USE flight_db;
+
+CREATE TABLE flights (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    flight_number VARCHAR(10) NOT NULL,
+    destination VARCHAR(255) NOT NULL,
+    departure_time TIMESTAMP NOT NULL,
+    price DECIMAL(10,2) NOT NULL
+);
+
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(50) DEFAULT 'USER'
+);

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flights</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Flight Management</h2>
+
+    <a href="/flights/new" class="btn btn-primary mb-3">Add Flight</a>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Flight Number</th>
+            <th>Destination</th>
+            <th>Departure Time</th>
+            <th>Price</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="f : ${flights}">
+            <td th:text="${f.id}"></td>
+            <td th:text="${f.flightNumber}"></td>
+            <td th:text="${f.destination}"></td>
+            <td th:text="${f.departureTime}"></td>
+            <td th:text="${f.price}"></td>
+            <td>
+                <a th:href="@{/flights/edit/{id}(id=${f.id})}" class="btn btn-warning btn-sm">Edit</a>
+
+                <form th:action="@{/flights/delete/{id}(id=${f.id})}" method="post" style="display:inline;">
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
