@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAN Chat App Cơ Bản</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- Thư viện SockJS và STOMP.js để dùng WebSocket -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+    <div id="username-page">
+        <div class="username-page-container">
+            <h1 class="title">Nhập Nickname</h1>
+            <form id="usernameForm" name="usernameForm">
+                <div class="form-group">
+                    <input type="text" id="name" placeholder="Ví dụ: Alice" autocomplete="off" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="accent username-submit">Tham gia Chat</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="chat-page" class="hidden">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>Phòng Chat Chung (LAN)</h2>
+            </div>
+            <ul id="messageArea">
+                <!-- Hiển thị Lịch sử chat từ Database truyền qua Thymeleaf -->
+                <li th:each="msg : ${history}" 
+                    th:class="${msg.type.name() == 'JOIN' or msg.type.name() == 'LEAVE' ? 'event-message' : 'chat-message'}">
+                    <i th:if="${msg.type.name() == 'JOIN' or msg.type.name() == 'LEAVE'}">
+                        <span th:text="${msg.sender} + (${msg.type.name() == 'JOIN'} ? ' đã tham gia phòng.' : ' đã rời khỏi phòng.')"></span>
+                    </i>
+                    <th:block th:if="${msg.type.name() == 'CHAT'}">
+                        <strong th:text="${msg.sender} + ': '"></strong>
+                        <span th:text="${msg.content}"></span>
+                    </th:block>
+                </li>
+            </ul>
+            <form id="messageForm" name="messageForm" nameForm="messageForm">
+                <div class="form-group">
+                    <div class="input-group clearfix">
+                        <input type="text" id="message" placeholder="Gõ tin nhắn..." autocomplete="off" class="form-control"/>
+                        <button type="submit" class="primary">Gửi</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>
