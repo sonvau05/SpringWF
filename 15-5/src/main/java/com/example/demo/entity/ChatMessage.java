@@ -13,6 +13,8 @@ public class ChatMessage {
     private MessageType type;
     private String content;
     private String sender;
+    private String fileUrl;
+    private String fileName;
 
     public enum MessageType {
         CHAT,
@@ -53,5 +55,21 @@ public class ChatMessage {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

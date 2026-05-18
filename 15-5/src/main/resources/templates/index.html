@@ -38,14 +38,18 @@
                     </i>
                     <th:block th:if="${msg.type.name() == 'CHAT'}">
                         <strong th:text="${msg.sender} + ': '"></strong>
-                        <span th:text="${msg.content}"></span>
+                        <span th:if="${msg.content != null and msg.content != ''}" th:text="${msg.content}"></span>
+                        <div th:if="${msg.fileUrl != null}" class="file-attachment">
+                            <a th:href="${msg.fileUrl}" th:text="${msg.fileName}" target="_blank" rel="noopener noreferrer"></a>
+                        </div>
                     </th:block>
                 </li>
             </ul>
             <form id="messageForm" name="messageForm" nameForm="messageForm">
                 <div class="form-group">
-                    <div class="input-group clearfix">
-                        <input type="text" id="message" placeholder="Gõ tin nhắn..." autocomplete="off" class="form-control"/>
+                    <div class="input-group clearfix" style="display: flex; gap: 10px;">
+                        <input type="file" id="fileInput" class="form-control" style="width: 250px;" />
+                        <input type="text" id="message" placeholder="Gõ tin nhắn..." autocomplete="off" class="form-control" style="flex: 1;" />
                         <button type="submit" class="primary">Gửi</button>
                     </div>
                 </div>

@@ -5,6 +5,7 @@ var chatPage = document.querySelector('#chat-page');
 var usernameForm = document.querySelector('#usernameForm');
 var messageForm = document.querySelector('#messageForm');
 var messageInput = document.querySelector('#message');
+var fileInput = document.querySelector('#fileInput');
 var messageArea = document.querySelector('#messageArea');
 var nameInput = document.querySelector('#name');
 
@@ -51,8 +52,40 @@ function onError(error) {
 
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
+    var file = fileInput.files[0];
 
-    if (messageContent && stompClient) {
+    if (file) {
+        var formData = new FormData();
+        formData.append("file", file);
+
+        fetch('/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text) });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (stompClient) {
+                var chatMessage = {
+                    sender: username,
+                    content: messageContent,
+                    type: 'CHAT',
+                    fileUrl: data.fileUrl,
+                    fileName: data.fileName
+                };
+                stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+                messageInput.value = '';
+                fileInput.value = '';
+            }
+        })
+        .catch(error => {
+            alert('Lỗi upload: ' + error.message);
+        });
+    } else if (messageContent && stompClient) {
         var chatMessage = {
             sender: username,
             content: messageContent,
@@ -77,7 +110,14 @@ function onMessageReceived(payload) {
         messageElement.innerHTML = '<i><span>' + message.sender + ' đã rời khỏi phòng.</span></i>';
     } else {
         messageElement.classList.add('chat-message');
-        messageElement.innerHTML = '<strong>' + message.sender + ': </strong><span>' + message.content + '</span>';
+        var innerHtml = '<strong>' + message.sender + ': </strong>';
+        if (message.content) {
+            innerHtml += '<span>' + message.content + '</span>';
+        }
+        if (message.fileUrl) {
+            innerHtml += '<div class="file-attachment"><a href="' + message.fileUrl + '" target="_blank" rel="noopener noreferrer">' + message.fileName + '</a></div>';
+        }
+        messageElement.innerHTML = innerHtml;
     }
 
     messageArea.appendChild(messageElement);
